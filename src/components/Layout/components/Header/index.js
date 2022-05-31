@@ -1,33 +1,26 @@
-import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleQuestion,
-  faCircleXmark,
-  faCloudUpload,
   faCoins,
   faEarthAsia,
   faEllipsisVertical,
   faGear,
   faKeyboard,
-  faMagnifyingGlass,
-  faMessage,
-  faSignIn,
+  faPlus,
   faSignOut,
-  faSpinner,
-  faUpload,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import Tippy from "@tippyjs/react";
-import HeadlessTippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css";
 
 import Button from "~/components/Button";
-import { Wrapper as PopperWrapper } from "~/components/Popper";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import images from "~/assets/images";
-import AccountItem from "~/components/AccountItem";
 import Menu from "~/components/Popper/Menu";
+import { InboxIcon, MessageIcon } from "~/components/Icons";
+import Image from "~/components/Image";
+import Search from "../Search";
 
 const cx = classNames.bind(styles);
 
@@ -56,20 +49,12 @@ const MENU_ITEMS = [
   },
   {
     icon: <FontAwesomeIcon icon={faKeyboard} />,
-    title: "Phím tắt trên bàn phím",
+    title: "Phím tắt",
   },
 ];
 
 function Header() {
-  const [searchResult, setSearchResult] = useState([]);
-
   const currentUser = true;
-
-  useEffect(() => {
-    setTimeout(() => {
-      setSearchResult([1, 2, 3, 4]);
-    }, 0);
-  });
 
   //Handle logic
   const handleMenuChange = (menuItem) => {
@@ -112,64 +97,37 @@ function Header() {
         <div className={cx("logo")}>
           <img src={images.logo} alt="Tiktok" />
         </div>
-
-        <HeadlessTippy
-          visible={searchResult.length > 0}
-          interactive={true}
-          render={(attrs) => (
-            <div className={cx("search-result")} tabIndex="1" {...attrs}>
-              <PopperWrapper>
-                <h4 className={cx("search-title")}>Tài khoản</h4>
-                <AccountItem />
-                <AccountItem />
-                <AccountItem />
-                <AccountItem />
-              </PopperWrapper>
-            </div>
-          )}
-        >
-          <div className={cx("search")}>
-            <input
-              placeholder="Tìm kiếm tài khoản và video"
-              spellCheck={false}
-            />
-
-            <button className={cx("clear")}>
-              <FontAwesomeIcon icon={faCircleXmark} />
-            </button>
-
-            <FontAwesomeIcon className={cx("loading")} icon={faSpinner} />
-
-            <button className={cx("search-btn")}>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
-          </div>
-        </HeadlessTippy>
+        {/* search */}
+        <Search />
 
         <div className={cx("actions")}>
           {currentUser ? (
             <>
+              <Button text leftIcon={<FontAwesomeIcon icon={faPlus} />}>
+                Tải lên
+              </Button>
               <Tippy
-                delay={[0, 200]}
-                content="Tải video lên"
+                offset={[12, 8]}
+                content="Tải lên video"
                 placement="bottom"
               >
-                <button className={cx("action-button")}>
-                  <FontAwesomeIcon icon={faCloudUpload} />
+                <button className={cx("action-button", "action-btn-message")}>
+                  <MessageIcon />
                 </button>
               </Tippy>
-              <button className={cx("action-button")}>
-                <FontAwesomeIcon icon={faMessage} />
-              </button>
+
+              <Tippy offset={[12, 8]} content="Hộp thư" placement="bottom">
+                <button className={cx("action-button")}>
+                  <InboxIcon />
+                </button>
+              </Tippy>
             </>
           ) : (
             <>
-              <Button text leftIcon={<FontAwesomeIcon icon={faUpload} />}>
+              <Button text leftIcon={<FontAwesomeIcon icon={faPlus} />}>
                 Tải lên
               </Button>
-              <Button primary leftIcon={<FontAwesomeIcon icon={faSignIn} />}>
-                Đăng nhập
-              </Button>
+              <Button primary>Đăng nhập</Button>
             </>
           )}
           <Menu
@@ -177,11 +135,11 @@ function Header() {
             onChange={handleMenuChange}
           >
             {currentUser ? (
-              <img
+              <Image
                 className={cx("user-avatar")}
                 src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/10437a6d19d28dc100254c8a5f3ae8b5~c5_100x100.jpeg?x-expires=1653901200&x-signature=Pvq%2BpmX1Q7kjdTskTps0TnFOOxA%3D"
-                alt="Nguyễn Văn A"
-              ></img>
+                alt=""
+              ></Image>
             ) : (
               <button className={cx("more-button")}>
                 <FontAwesomeIcon icon={faEllipsisVertical}></FontAwesomeIcon>

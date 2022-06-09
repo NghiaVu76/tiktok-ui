@@ -10,14 +10,16 @@ import {
   faSignOut,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
-import Button from "~/components/Button";
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import images from "~/assets/images";
+import routesConfig from "~/configs/routes";
 import Menu from "~/components/Popper/Menu";
+import Button from "~/components/Button";
 import { InboxIcon, MessageIcon } from "~/components/Icons";
 import Image from "~/components/Image";
 import Search from "../Search";
@@ -29,7 +31,7 @@ const MENU_ITEMS = [
     icon: <FontAwesomeIcon icon={faEarthAsia} />,
     title: "Tiếng Việt",
     children: {
-      title: "Tiếng Việt",
+      title: "Ngôn ngữ",
       data: [
         {
           code: "vi",
@@ -94,10 +96,10 @@ function Header() {
   return (
     <header className={cx("wrapper")}>
       <div className={cx("inner")}>
-        <div className={cx("logo")}>
-          <img src={images.logo} alt="Tiktok" />
-        </div>
-        {/* search */}
+        <Link to={routesConfig.home} className={cx("logo")}>
+          <Image src={images.logo} alt="Tiktok" />
+        </Link>
+
         <Search />
 
         <div className={cx("actions")}>
@@ -119,6 +121,7 @@ function Header() {
               <Tippy offset={[12, 8]} content="Hộp thư" placement="bottom">
                 <button className={cx("action-button")}>
                   <InboxIcon />
+                  <span className={cx("badge")}>12</span>
                 </button>
               </Tippy>
             </>
@@ -137,12 +140,12 @@ function Header() {
             {currentUser ? (
               <Image
                 className={cx("user-avatar")}
-                src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/10437a6d19d28dc100254c8a5f3ae8b5~c5_100x100.jpeg?x-expires=1653901200&x-signature=Pvq%2BpmX1Q7kjdTskTps0TnFOOxA%3D"
-                alt=""
-              ></Image>
+                src="https://scontent.fhan2-3.fna.fbcdn.net/v/t39.30808-6/285340184_1640361699690120_3074360572988614177_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=fqxoi-bN_IQAX8A4Jfv&_nc_ht=scontent.fhan2-3.fna&oh=00_AT_jeCMQXcwt2wyhrgtNEcMevQFuVMlkn4rmPflTXSTgHw&oe=629C7276"
+                alt="titok"
+              />
             ) : (
               <button className={cx("more-button")}>
-                <FontAwesomeIcon icon={faEllipsisVertical}></FontAwesomeIcon>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
             )}
           </Menu>

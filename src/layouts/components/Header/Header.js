@@ -18,11 +18,11 @@ import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import images from "~/assets/images";
 import routesConfig from "~/configs/routes";
-import Menu from "~/components/Popper/Menu";
-import Button from "~/components/Button";
-import { InboxIcon, MessageIcon } from "~/components/Icons";
-import Image from "~/components/Image";
-import Search from "../Search";
+import Menu from "~/components/Popper/Menu/Menu";
+import Button from "~/components/Button/Button";
+import { InboxIcon, MessageIcon } from "~/components/Icons/Icon";
+import Image from "~/components/Image/Image";
+import Search from "../Search/Search";
 
 const cx = classNames.bind(styles);
 
@@ -130,7 +130,9 @@ function Header() {
               <Button text leftIcon={<FontAwesomeIcon icon={faPlus} />}>
                 Tải lên
               </Button>
-              <Button primary>Đăng nhập</Button>
+              <Button primary to="/">
+                Đăng nhập
+              </Button>
             </>
           )}
           <Menu

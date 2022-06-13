@@ -9,8 +9,8 @@ import HeadlessTippy from "@tippyjs/react/headless";
 import * as searchService from "~/services/searchService";
 import classNames from "classnames/bind";
 import styles from "./Search.module.scss";
-import { Wrapper as PopperWrapper } from "~/components/Popper";
-import AccountItem from "~/components/AccountItem";
+import { Wrapper as PopperWrapper } from "~/components/Popper/Popper";
+import AccountItem from "~/components/AccountItem/AccountItem";
 import { useDebounce } from "~/hooks";
 
 const cx = classNames.bind(styles);
@@ -18,23 +18,23 @@ const cx = classNames.bind(styles);
 function Search() {
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  const [showResult, setShowResult] = useState(true);
+  const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const inputRef = useRef();
 
-  const debounced = useDebounce(searchValue, 500); //sử dụng useDebounce để lấy giá cuối cùng của search value sau một khoảng trễ khi nhập vào ô input, gán
+  const debouncedValue = useDebounce(searchValue, 500); //sử dụng useDebounce để lấy giá cuối cùng của search value sau một khoảng trễ khi nhập vào ô input, gán
 
   useEffect(() => {
-    if (!debounced.trim()) {
+    if (!debouncedValue.trim()) {
       setSearchResult([]); //khi xóa hết ô input thì không hiện kết quả tìm kiếm
       return;
-    } // thoát hàm useEffect nếu khi searchValue(tức là debounced) là một chuỗi rỗng dẫn tới 'q= rỗng', dùng trim() để xóa chuỗi rỗng đi
+    } // thoát hàm useEffect nếu khi searchValue(tức là debouncedValue) là một chuỗi rỗng dẫn tới 'q= rỗng', dùng trim() để xóa chuỗi rỗng đi
 
     setLoading(true);
 
     //fetch thông thường
-    //fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
+    //fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debouncedValue)}&type=less`)
     // .then((res) => res.json())
     // .then((res) => {
     //   setSearchResult(res.data);
@@ -50,7 +50,7 @@ function Search() {
     //   try {
     //     const res = await request.get("users/search", {
     //       params: {
-    //         q: debounced,
+    //         q: debouncedValue,
     //         type: "less",
     //       }
     //     })
@@ -67,7 +67,7 @@ function Search() {
     // request
     //   .get("users/search", {
     //     params: {
-    //       q: debounced,
+    //       q: debouncedValue,
     //       type: "less",
     //     },
     //   })
@@ -83,13 +83,13 @@ function Search() {
     const fetchApi = async () => {
       setLoading(true);
 
-      const result = await searchService.search(debounced);
+      const result = await searchService.search(debouncedValue);
       setSearchResult(result);
 
       setLoading(false);
     };
     fetchApi();
-  }, [debounced]);
+  }, [debouncedValue]);
 
   const handleClear = () => {
     setSearchValue("");

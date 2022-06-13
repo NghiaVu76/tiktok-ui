@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import "tippy.js/dist/tippy.css";
 import Tippy from "@tippyjs/react/headless";
 
-import { Wrapper as PopperWrapper } from "~/components/Popper";
+import { Wrapper as PopperWrapper } from "~/components/Popper/Popper";
 import styles from "./Menu.module.scss";
 import classNames from "classnames/bind";
 import MenuItem from "./MenuItem";
@@ -41,6 +41,22 @@ function Menu({
     });
   };
 
+  const renderResult = (attrs) => (
+    <div className={cx("menu-list")} tabIndex="-1" {...attrs}>
+      <PopperWrapper className={cx("menu-popper")}>
+        {history.length > 1 && (
+          <Header
+            title={currentMenu.title}
+            onBack={() => {
+              setHistory((prev) => prev.slice(0, prev.length - 1)); //xóa ptu(Menu) cuối ra khỏi mảng
+            }}
+          />
+        )}
+        <div className={cx("menu-body")}>{renderItems()}</div>
+      </PopperWrapper>
+    </div>
+  );
+
   return (
     <Tippy
       interactive
@@ -48,21 +64,7 @@ function Menu({
       offset={[12, 8]}
       hideOnClick={hideOnClick}
       placement="bottom-end"
-      render={(attrs) => (
-        <div className={cx("menu-list")} tabIndex="-1" {...attrs}>
-          <PopperWrapper className={cx("menu-popper")}>
-            {history.length > 1 && (
-              <Header
-                title={currentMenu.title}
-                onBack={() => {
-                  setHistory((prev) => prev.slice(0, prev.length - 1)); //xóa ptu(Menu) cuối ra khỏi mảng
-                }}
-              />
-            )}
-            <div className={cx("menu-body")}>{renderItems()}</div>
-          </PopperWrapper>
-        </div>
-      )}
+      render={renderResult}
       onHide={() => setHistory((prev) => prev.slice(0, 1))} // trở về menu ban đầu khi hover ra ngoài
     >
       {children}
